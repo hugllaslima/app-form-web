@@ -1,0 +1,21 @@
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Variáveis de ambiente e configs locais
+.env
+
+# Node.js (caso use no futuro)
+node_modules/
+
+# Python (caso use scripts python no futuro)
+__pycache__/
+*.pyc
+venv/
+
+# Pasta de build (caso venha a gerar builds no futuro)
+dist/
+build/
