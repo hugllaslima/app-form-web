@@ -1,2 +1,5 @@
 # form-web-app
-Aplicativo de Cadastro Básico Web 
+Aplicativo Web de Cadastro Básico 
+
+| TECNOLOGIAS UTILIZADAS | 
+|  | 
