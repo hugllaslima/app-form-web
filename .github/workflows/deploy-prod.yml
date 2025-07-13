@@ -20,7 +20,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1  # Altere para a região do seu Lightsail e ECR
+          aws-region: ${{ vars.AWS_REGION }}
 
       # Logar no Amazon ECR
       - name: Login no Amazon ECR
@@ -43,12 +43,12 @@ jobs:
           docker push 123456789012.dkr.ecr.us-east-1.amazonaws.com/meu-app-stage:latest
       
       # Configurar SSH e Deploy na Instância Lightsail
-      - name: Deploy na Instância Lightsail via SSH
+      - name: Deploy na Instância EC2 via SSH
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.LIGHTSAIL_HOST }}
-          username: ubuntu
-          key: ${{ secrets.LIGHTSAIL_SSH_PRIVATE_KEY }}
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu  # ou ${{ secrets.EC2_SSH_USER }} se tiver customizado
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           script: |
             sudo docker login --username AWS --password $(aws ecr get-login-password --region us-east-1) 123456789012.dkr.ecr.us-east-1.amazonaws.com
             sudo docker pull 123456789012.dkr.ecr.us-east-1.amazonaws.com/meu-app-stage:latest
