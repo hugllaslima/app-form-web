@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout do repositório git
+      # Checkout do repositório github
       - name: Checkout do código
         uses: actions/checkout@v3
 
