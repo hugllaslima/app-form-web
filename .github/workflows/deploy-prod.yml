@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout do repositório
+      # Checkout do repositório git
       - name: Checkout do código
         uses: actions/checkout@v3
 
@@ -55,4 +55,3 @@ jobs:
             sudo docker stop meu-app || true
             sudo docker rm meu-app || true
             sudo docker run -d --name meu-app -p 80:3000 123456789012.dkr.ecr.us-east-1.amazonaws.com/meu-app-stage:latest
-
