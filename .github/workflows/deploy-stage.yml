@@ -3,7 +3,7 @@ name: Deploy Para Ambiente de Stage
 on:
   push:
     branches:
-      - stage   # Escolha a branch de homologação
+      - stage   
 
 jobs:
   deploy-stage:
