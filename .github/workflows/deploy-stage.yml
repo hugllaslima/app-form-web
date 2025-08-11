@@ -27,8 +27,4 @@ jobs:
           docker run -d --name meu-app -p 8080:80 meu-app-stage:latest
 
       - name: Cleanup imagens antigas
-<<<<<<< HEAD
-        run: docker image prune -f
-=======
-        run: docker image prune -f
->>>>>>> d045e65043c656e7594a4fd86ca2ae3af1bc3965
+        run: docker image prune -f    
