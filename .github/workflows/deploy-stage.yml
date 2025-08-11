@@ -2,8 +2,8 @@ name: deploy the stage environment
 
 on:
   push:
-    tags: [ '*.*.*' ]
-  workflow_dispatch:
+    branches:
+      - main
 
 env:
   REGISTRY: ghcr.io
