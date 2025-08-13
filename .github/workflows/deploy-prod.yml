@@ -1,5 +1,6 @@
 name: Deploy Para Ambiente de Producao
-'on':
+
+on:
   push:
     branches:
       - main
@@ -7,51 +8,43 @@ name: Deploy Para Ambiente de Producao
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
-
       - name: Checkout do código
         uses: actions/checkout@v3
 
       - name: Configurar AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-access-key-id: '${{ secrets.AWS_ACCESS_KEY_ID }}'
-          aws-secret-access-key: '${{ secrets.AWS_SECRET_ACCESS_KEY }}'
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-          
+      
       - name: Login no Amazon ECR
         run: |
-          aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | \
-            docker login --username AWS --password-stdin 316429278885.dkr.ecr.us-east-1.amazonaws.com
+          aws ecr get-login-password --region us-east-1 | \
+          docker login --username AWS --password-stdin 316429278885.dkr.ecr.us-east-1.amazonaws.com
 
       - name: Build da imagem
         run: |
           docker build -t meu-app-prod .
 
       - name: Tag da imagem para o ECR
-        run: >
-          docker tag app-form-web:latest
-          316429278885.dkr.ecr.us-east-1.amazonaws.com/app-form-web
+        run: |
+          docker tag meu-app-prod:latest 316429278885.dkr.ecr.us-east-1.amazonaws.com/app-form-web
+
       - name: Enviar a Imagem para o Amazon ECR
-        run: >
-          docker push
-          316429278885.dkr.ecr.us-east-1.amazonaws.com/app-form-web:latest
+        run: |
+          docker push 316429278885.dkr.ecr.us-east-1.amazonaws.com/app-form-web:latest
+
       - name: Deploy na Instância EC2 via SSH
         uses: appleboy/ssh-action@master
         with:
-          host: '${{ secrets.EC2_HOST }}'
+          host: ${{ secrets.EC2_HOST }}
           username: ubuntu
-          key: '${{ secrets.EC2_SSH_PRIVATE_KEY }}'
-          script: >
-            sudo docker login --username AWS --password $(aws ecr
-            get-login-password --region ${{ secrets.AWS_REGION }})
-            123456789012.dkr.ecr.us-east-1.amazonaws.com
-
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          script: |
+            sudo docker login --username AWS --password $(aws ecr get-login-password --region us-east-1) 316429278885.dkr.ecr.us-east-1.amazonaws.com
             sudo docker pull 316429278885.dkr.ecr.us-east-1.amazonaws.com/app-form-web:latest
-
             sudo docker stop app-form-web || true
-
             sudo docker rm app-form-web || true
-
             sudo docker run -d --name app-form-web -p 80:3000 316429278885.dkr.ecr.us-east-1.amazonaws.com/app-form-web:latest
