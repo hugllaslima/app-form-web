@@ -24,7 +24,7 @@ jobs:
 
       - name: Subir novo container de Stage
         run: |
-          docker run -d --restart=always --name app-form-web -p 8080:80 app-form-web:latest
+          docker run -d --name meu-app -p 8080:80 meu-app-stage:latest
 
       - name: Cleanup imagens antigas
-        run: docker image prune -f    
+        run: docker image prune -f
