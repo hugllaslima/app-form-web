@@ -15,16 +15,16 @@ jobs:
 
       - name: Build da imagem Docker
         working-directory: ./src
-        run: docker build -t app-form-web .
+        run: docker build -t app-form-web-stage .
 
       - name: Parar e remover container antigo (se existir)
         run: |
-          docker stop app-form-web || true
-          docker rm app-form-web || true
+          docker stop app-form-web-stage || true
+          docker rm app-form-web-stage || true
 
       - name: Subir novo container de Stage
         run: |
-          docker run -d --restart=always --name meu-app -p 8080:80 meu-app-stage:latest
+          docker run -d --restart=always --name app-form-web-stage -p 8080:80 app-form-web-stage:latest
 
       - name: Cleanup imagens antigas
         run: docker image prune -f
