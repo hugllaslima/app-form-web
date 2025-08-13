@@ -36,7 +36,7 @@ jobs:
       # Tag da imagem para enviar ao ECR
       - name: Tag da imagem para o ECR
         run: |
-          docker tag meu-app-prod:latest 123456789012.dkr.ecr.us-east-1.amazonaws.com/app-form-web:latest
+          docker tag app-form-web:latest 316429278885.dkr.ecr.us-east-1.amazonaws.com/app-form-web
 
       # Push da imagem para o ECR
       - name: Enviar a Imagem para o Amazon ECR
