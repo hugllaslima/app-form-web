@@ -26,7 +26,7 @@ jobs:
       - name: Login no Amazon ECR
         run: |
           aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | \
-            docker login --username AWS --password-stdin 123456789012.dkr.ecr.us-east-1.amazonaws.com
+            docker login --username AWS --password-stdin 316429278885.dkr.ecr.us-east-1.amazonaws.com
 
       # Construir a imagem Docker
       - name: Build da imagem
@@ -36,12 +36,12 @@ jobs:
       # Tag da imagem para enviar ao ECR
       - name: Tag da imagem para o ECR
         run: |
-          docker tag meu-app-prod:latest 123456789012.dkr.ecr.us-east-1.amazonaws.com/meu-app-prod:latest
+          docker tag meu-app-prod:latest 123456789012.dkr.ecr.us-east-1.amazonaws.com/app-form-web:latest
 
       # Push da imagem para o ECR
       - name: Enviar a Imagem para o Amazon ECR
         run: |
-          docker push 123456789012.dkr.ecr.us-east-1.amazonaws.com/meu-app-prod:latest
+          docker push 316429278885.dkr.ecr.us-east-1.amazonaws.com/app-form-web:latest
 
       # Deploy na Instância EC2 via SSH
       - name: Deploy na Instância EC2 via SSH
