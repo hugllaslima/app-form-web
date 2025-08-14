@@ -26,7 +26,7 @@ jobs:
 
       - name: Build da imagem
         run: |
-          docker build -t app-form-web -f src/Dockerfile .
+          docker build -t app-form-web .src/
 
       - name: Tag da imagem para o ECR
         run: |
