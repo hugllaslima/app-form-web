@@ -26,11 +26,11 @@ jobs:
 
       - name: Build da imagem
         run: |
-          docker build -t meu-app-prod .
+          docker build -t app-form-web .
 
       - name: Tag da imagem para o ECR
         run: |
-          docker tag meu-app-prod:latest 316429278885.dkr.ecr.us-east-1.amazonaws.com/app-form-web
+          docker tag app-form-web:latest 316429278885.dkr.ecr.us-east-1.amazonaws.com/app-form-web
 
       - name: Enviar a Imagem para o Amazon ECR
         run: |
