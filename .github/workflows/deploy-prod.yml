@@ -36,19 +36,17 @@ jobs:
         run: |
           docker push 316429278885.dkr.ecr.us-east-1.amazonaws.com/app-form-web:latest
 
-      - name: Teste acesso SSH do runner para EC2 (porta 22)
-        run: |
-          nc -zvw10 18.234.123.194 22 || echo "Falha de acesso SSH (porta fechada em 22 do runner GitHub)"
-
       - name: Deploy na Instância EC2 via SSH
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          envs: AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,AWS_REGION
           script: |
-            sudo docker login --username AWS --password $(aws ecr get-login-password --region us-east-1) 316429278885.dkr.ecr.us-east-1.amazonaws.com
+            sudo docker login --username AWS --password $(aws ecr get-login-password --region $AWS_REGION) 316429278885.dkr.ecr.us-east-1.amazonaws.com
             sudo docker pull 316429278885.dkr.ecr.us-east-1.amazonaws.com/app-form-web:latest
             sudo docker stop app-form-web || true
             sudo docker rm app-form-web || true
             sudo docker run -d --name app-form-web -p 80:3000 316429278885.dkr.ecr.us-east-1.amazonaws.com/app-form-web:latest
+
