@@ -1,4 +1,4 @@
-name: Deploy Para Ambiente de Producao
+name: Deploy Para Ambiente de Producao AWS
 
 on:
   push:
