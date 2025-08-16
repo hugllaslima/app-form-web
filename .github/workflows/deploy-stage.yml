@@ -1,4 +1,4 @@
-name: Deploy Para Ambiente de Stage
+name: Deploy Para Ambiente de Stage Local
 
 on:
   push:
