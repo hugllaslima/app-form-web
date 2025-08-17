@@ -17,7 +17,7 @@ jobs:
         working-directory: ./src
         run: docker build -t app-form-web-stage .
 
-      - name: Parar e remover container antigo (se existir)
+      - name: Parar e remover container antigo
         run: |
           docker stop app-form-web-stage || true
           docker rm app-form-web-stage || true
