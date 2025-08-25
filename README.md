@@ -7,15 +7,25 @@ Este repositório foi criado para você que está iniciando na carreira de DevOp
 app-form-web/
 
 ├── .github/workflows/ # Diretório dos Workflows (CI/CD) 
+
 │   ├── deploy-prod.yml # (Para Ambiente de Produção)
+
 │   └── deploy-stage.yml # (Para Ambiente de Stage)
+
 ├── src/
+
 │   ├── index.html
+
 │   ├── script.js
+
 │   └──  Dockerfile
+
 ├── .gitgnore/
+
 ├── LICENSE.md
+
 ├── README.md
+
 └── SECURITY.md
 
 ## Aplicação
