@@ -37,9 +37,10 @@ Esta aplicação foi desenvolvida em "html" e "JavaScript" onde existem duas bra
 
 ## Teste Local
 
-'''
-
-cd diretorio/da/aplicação
-git clone  https://github.com/hugllaslima/app-form-web
-'''
+Os comandos são:
+```
+git status
+git add
+git commit
+```
 
