@@ -36,10 +36,11 @@ Esta aplicação foi desenvolvida em "html" e "JavaScript" onde existem duas bra
 - **Branch "stage":** Deploy realizado em um ambiente local via "self-hosted runner" utilizando uma VM com Ubuntu Server 24.04 LTS no Proxmox VE.
 
 ## Teste Local
-...
+
+'''
 
 cd diretorio/da/aplicação
 git clone  https://github.com/hugllaslima/app-form-web
 
-...
+'''
 
