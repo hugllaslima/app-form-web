@@ -41,6 +41,5 @@ Esta aplicação foi desenvolvida em "html" e "JavaScript" onde existem duas bra
 
 cd diretorio/da/aplicação
 git clone  https://github.com/hugllaslima/app-form-web
-
 '''
 
