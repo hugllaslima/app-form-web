@@ -32,6 +32,13 @@ app-form-web/
 
 Esta aplicação foi desenvolvida em "html" e "JavaScript" onde existem duas branchs com seus respectivos deploys:
 
-- Branch "main": Deploy realizado em uma instancia EC2 utilixando o ECR (serviço de registro de imagens de contêiner).
-- Branch "stage": Deploy realizado em um ambiente local utilizando uma VM no Proxmox VE.
+- Branch "main": Deploy realizado em uma instancia EC2 com Ubuntu Server 24.04 LTS via ssh utilixando o ECR (serviço de registro de imagens de contêiner).
+- Branch "stage": Deploy realizado em um ambiente local via "self-hosted runner" utilizando uma VM com Ubuntu Server 24.04 LTS no Proxmox VE.
+
+## Teste Local
+...
+cd diretorio/da/aplicação
+git clone  https://github.com/hugllaslima/app-form-web
+
+...
 
