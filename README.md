@@ -1,6 +1,6 @@
 # App Form Web
 
-Este repositório foi criado para você que está iniciando na carreira de DevOps e precisa inicialmente de conceitos básico e práticos sobre o que de fato é um CI/CD.
+Este repositório foi desenvolvido para profissionais que estão iniciando na carreira de DevOps e precisam compreender os conceitos fundamentais e práticos sobre CI/CD (Continuous Integration/Continuous Deployment). O projeto apresenta uma aplicação web simples que consiste em um formulário onde o usuário pode inserir nome e e-mail, demonstrando na prática como implementar pipelines de integração e entrega contínuas com o GitActions.
 
 ## Arquitetura
 
@@ -20,7 +20,7 @@ app-form-web/
 
 │   └──  Dockerfile
 
-├── .gitgnore/
+├── .gitgnore
 
 ├── LICENSE.md
 
@@ -35,12 +35,17 @@ Esta aplicação foi desenvolvida em "html" e "JavaScript" onde existem duas bra
 - **Branch "main":** Deploy realizado em uma instancia EC2 com Ubuntu Server 24.04 LTS via ssh utilixando o ECR (serviço de registro de imagens de contêiner).
 - **Branch "stage":** Deploy realizado em um ambiente local via "self-hosted runner" utilizando uma VM com Ubuntu Server 24.04 LTS no Proxmox VE.
 
-## Teste Local
+## Pré-requisitos
+
+- Docker
+
+## Teste Local Para Ambiente Linux
 
 Os comandos são:
 ```
-git status
-git add
-git commit
+git clone https://github.com/hugllaslima/app-form-web
+cd app-form-web/src/
+docker build -t app-form-web-stage .
+docker run -d --restart=always --name app-form-web-stage -p 8080:80 app-form-web-stage:latest
 ```
 
