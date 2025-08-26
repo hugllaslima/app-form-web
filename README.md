@@ -48,5 +48,3 @@ cd app-form-web/src/
 docker build -t app-form-web-stage .
 docker run -d --restart=always --name app-form-web-stage -p 8080:80 app-form-web-stage:latest
 ```
-
-
