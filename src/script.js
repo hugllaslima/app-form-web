@@ -25,6 +25,12 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+function formatDate(dateStr) {
+    if (!dateStr) return '';
+    const [year, month, day] = dateStr.split('-');
+    return `${day}/${month}/${year}`;
+}
+
 function loadTable() {
     const tbody = document.querySelector('#dataTable tbody');
     tbody.innerHTML = '';
@@ -38,7 +44,7 @@ function loadTable() {
             <td>${data.name}</td>
             <td>${data.email}</td>
             <td>${data.phone}</td>
-            <td>${data.dob}</td>
+            <td>${formatDate(data.dob)}</td>
             <td>
                 <button class="btn btn-danger btn-sm" onclick="deleteData(${index})">Excluir</button>
             </td>
