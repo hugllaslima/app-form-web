@@ -1,19 +1,47 @@
-name: Deploy Para Ambiente de Producao AWS
+name: CI/CD Pipeline Unificado
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main, stage ]
   pull_request:
-    branches:
-      - main
+    branches: [ main, stage ]
     types: [closed]
 
 jobs:
-  build-and-deploy:
-    if: github.ref == 'refs/heads/main' || (github.event.pull_request.merged == true && github.base_ref == 'main')
-    environment: app-form-web
+  deploy-stage:
+    name: Deploy Para Ambiente de Stage Local
+    if: |
+      (github.event_name == 'push' && github.ref == 'refs/heads/stage') ||
+      (github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.base_ref == 'stage')
+    runs-on: [self-hosted, stage-runner]
+    
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+        
+      - name: Build da imagem Docker
+        working-directory: ./src
+        run: docker build -t app-form-web-stage .
+        
+      - name: Parar e remover container antigo
+        run: |
+          docker stop app-form-web-stage || true
+          docker rm app-form-web-stage || true
+          
+      - name: Subir novo container de Stage
+        run: |
+          docker run -d --restart=always --name app-form-web-stage -p 8080:80 app-form-web-stage:latest
+          
+      - name: Cleanup imagens antigas
+        run: docker image prune -f
+
+  deploy-production:
+    name: Deploy Para Ambiente de Producao AWS
+    if: |
+      (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+      (github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.base_ref == 'main')
     runs-on: ubuntu-latest
+    environment: app-form-web
     
     steps:
       - name: Checkout do código
