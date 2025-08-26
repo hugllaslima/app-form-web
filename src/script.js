@@ -1,30 +1,50 @@
-document.getElementById('dataForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
+document.addEventListener('DOMContentLoaded', function () {
+    loadTable();
 
-    const data = { name, email };
-    let dataList = JSON.parse(localStorage.getItem('dataList')) || [];
-    dataList.push(data);
-    localStorage.setItem('dataList', JSON.stringify(dataList));
+    document.getElementById('dataForm').addEventListener('submit', function (e) {
+        e.preventDefault();
 
-    displayData();
-    this.reset();
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const phone = document.getElementById('phone').value;
+        const dob = document.getElementById('dob').value;
+
+        const userData = {
+            name,
+            email,
+            phone,
+            dob
+        };
+
+        let dataList = JSON.parse(localStorage.getItem('dataList')) || [];
+        dataList.push(userData);
+        localStorage.setItem('dataList', JSON.stringify(dataList));
+
+        this.reset();
+        loadTable();
+    });
 });
 
-function displayData() {
+function loadTable() {
+    const tbody = document.querySelector('#dataTable tbody');
+    tbody.innerHTML = '';
+
     const dataList = JSON.parse(localStorage.getItem('dataList')) || [];
-    const tableBody = document.getElementById('dataTable').querySelector('tbody');
-    tableBody.innerHTML = '';
 
     dataList.forEach((data, index) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
+        const tr = document.createElement('tr');
+
+        tr.innerHTML = `
             <td>${data.name}</td>
             <td>${data.email}</td>
-            <td><button class="btn btn-danger" onclick="deleteData(${index})">Excluir</button></td>
+            <td>${data.phone}</td>
+            <td>${data.dob}</td>
+            <td>
+                <button class="btn btn-danger btn-sm" onclick="deleteData(${index})">Excluir</button>
+            </td>
         `;
-        tableBody.appendChild(row);
+
+        tbody.appendChild(tr);
     });
 }
 
@@ -32,8 +52,5 @@ function deleteData(index) {
     let dataList = JSON.parse(localStorage.getItem('dataList')) || [];
     dataList.splice(index, 1);
     localStorage.setItem('dataList', JSON.stringify(dataList));
-    displayData();
+    loadTable();
 }
-
-// Display data on page load
-displayData();
