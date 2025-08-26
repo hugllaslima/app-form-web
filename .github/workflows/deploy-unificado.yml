@@ -1,4 +1,4 @@
-name: CI/CD Pipeline Unificado
+name: CI/CD Deploy Unificado
 
 on:
   push:
