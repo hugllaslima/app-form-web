@@ -38,6 +38,7 @@ Esta aplicação foi desenvolvida em "html" e "JavaScript" onde existem duas bra
 ## Pré-requisitos
 
 - Docker
+- Ubuntu Server 24.04 LTS
 
 ## Teste Local Para Ambiente Linux
 
