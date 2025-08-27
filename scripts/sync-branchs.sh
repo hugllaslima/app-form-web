@@ -1,4 +1,5 @@
 #!/bin/bash
+
 echo "🔄 Sincronizando branches..."
 
 git checkout main
