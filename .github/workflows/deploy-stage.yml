@@ -31,3 +31,4 @@ jobs:
           
       - name: Cleanup imagens antigas
         run: docker image prune -f
+
