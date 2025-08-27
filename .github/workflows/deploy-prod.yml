@@ -1,4 +1,4 @@
-name: Deploy Para Ambiente de Producao AWS
+name: Deploy Para Ambiente de Producao AWS (ECR + EC2)
 
 on:
   pull_request:
