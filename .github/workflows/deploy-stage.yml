@@ -1,0 +1,37 @@
+name: Deploy Para Ambiente de Stage Local
+
+on:
+  push:
+    branches: [ stage ]
+
+jobs:
+  deploy-stage:
+    # SÓ executa se for push direto na stage
+    if: github.ref == 'refs/heads/stage' && github.event_name == 'push'
+    runs-on: [self-hosted, stage-runner]
+    
+    steps:
+      - name: Debug
+        run: |
+          echo "=== STAGE DEPLOY ==="
+          echo "Ref: ${{ github.ref }}"
+          echo "Event: ${{ github.event_name }}"
+          
+      - name: Checkout do código
+        uses: actions/checkout@v4
+        
+      - name: Build da imagem Docker
+        working-directory: ./src
+        run: docker build -t app-form-web-stage .
+        
+      - name: Parar e remover container antigo
+        run: |
+          docker stop app-form-web-stage || true
+          docker rm app-form-web-stage || true
+          
+      - name: Subir novo container de Stage
+        run: |
+          docker run -d --restart=always --name app-form-web-stage -p 8080:80 app-form-web-stage:latest
+          
+      - name: Cleanup imagens antigas
+        run: docker image prune -f
