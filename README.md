@@ -64,7 +64,7 @@ docker run -d --restart=always --name app-form-web-stage -p 8080:80 app-form-web
 
 #### Fluxo Utilizado 
 
-- ✅ feature/nova-função → commit: Cria uma nova branch a partir da branch “main” 
+- ✅ main → feature/nova-função → commit: Cria uma nova branch a partir da branch “main”
 - ✅ Feature → Stage: Realiza o "Pull Request" para o Ambiente de Stage (Deploy Stage)
 - ✅ Stage → Main: Realiza o "Merge Pull Request" para o Ambiente de Produção (Deploy Produção)
 
