@@ -25,6 +25,12 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+function formatDate(dateStr) {
+    if (!dateStr) return '';
+    const [year, month, day] = dateStr.split('-');
+    return `${day}-${month}-${year}`;
+}
+
 function loadTable() {
     const tbody = document.querySelector('#dataTable tbody');
     tbody.innerHTML = '';
