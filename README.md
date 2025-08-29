@@ -1,6 +1,6 @@
 # App Form Web
 
-Este repositório foi desenvolvido para profissionais que estão iniciando na carreira de DevOps e precisam compreender os conceitos basicos, fundamentais e práticos sobre CI/CD (Continuous Integration/Continuous Deployment) na prática. O projeto apresenta uma aplicação web simples que consiste em um formulário onde o usuário pode inserir dados como: nome, e-mail, telefone e data de nascimento, assim demonstrando na prática como implementar pipelines de integração e entrega contínuas com o GitActions.
+Este repositório foi desenvolvido para pessoas que estão iniciando na carreira de DevOps e precisam compreender os conceitos fundamentais e práticos sobre CI/CD (Continuous Integration/Continuous Deployment) na prática. O projeto apresenta uma aplicação web simples que consiste em um formulário onde o usuário pode inserir dados como: nome, e-mail, telefone e data de nascimento, assim demonstrando na prática como implementar pipelines de integração e entrega contínua utilizando o GitActions.
 
 ## Arquitetura
 
