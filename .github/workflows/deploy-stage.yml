@@ -1,37 +1,59 @@
-name: Deploy Para Ambiente de Stage Local
+# 🧪 PIPELINE DE STAGING - Deploy Para Ambiente de Stage Local
+# Este workflow implementa o deploy automatizado para o ambiente de homologação/testes
+# Utiliza self-hosted runner local para simular um ambiente de staging
 
+name: (CI/CD) Deploy Para Ambiente de Stage Local
+
+# 📋 TRIGGER: Define quando este workflow será executado
+# Executa sempre que há um PUSH direto na branch stage
 on:
   push:
-    branches: [ stage ]
+    branches: [ stage ]       # Monitora pushes na branch stage
 
 jobs:
+  # 🧪 JOB PRINCIPAL: Responsável por todo o processo de deploy em staging
   deploy-stage:
-    # SÓ executa se for push direto na stage
+    # ⚠️ CONDIÇÃO DE SEGURANÇA: Garante que só executa em cenários específicos
+    # SÓ executa se for push direto na stage (evita execuções desnecessárias)
     if: github.ref == 'refs/heads/stage' && github.event_name == 'push'
+    
+    # 🏠 RUNNER: Executa em self-hosted runner local (ambiente controlado)
+    # Permite simular um ambiente de staging real sem custos de cloud
     runs-on: [self-hosted, stage-runner]
     
     steps:
+      # 🔍 STEP 1: Debug - Mostra informações do contexto para troubleshooting
       - name: Debug
         run: |
           echo "=== STAGE DEPLOY ==="
           echo "Ref: ${{ github.ref }}"
           echo "Event: ${{ github.event_name }}"
           
+      # 📥 STEP 2: Checkout - Baixa o código fonte do repositório
       - name: Checkout do código
         uses: actions/checkout@v4
         
+      # 🏗️ STEP 3: Build - Constrói a imagem Docker da aplicação localmente
+      # working-directory especifica onde executar o comando (pasta src)
       - name: Build da imagem Docker
         working-directory: ./src
         run: docker build -t app-form-web-stage .
         
+      # 🛑 STEP 4: Cleanup - Para e remove container antigo para evitar conflitos
+      # || true garante que o pipeline não falhe se o container não existir
       - name: Parar e remover container antigo
         run: |
           docker stop app-form-web-stage || true
           docker rm app-form-web-stage || true
           
+      # 🚀 STEP 5: Deploy - Inicia o novo container com a versão atualizada
+      # -d: executa em background | --restart=always: reinicia automaticamente
+      # -p 8080:80: mapeia porta 8080 do host para porta 80 do container
       - name: Subir novo container de Stage
         run: |
           docker run -d --restart=always --name app-form-web-stage -p 8080:80 app-form-web-stage:latest
           
+      # 🧹 STEP 6: Limpeza - Remove imagens Docker antigas para economizar espaço
+      # -f: força a remoção sem confirmação
       - name: Cleanup imagens antigas
         run: docker image prune -f
