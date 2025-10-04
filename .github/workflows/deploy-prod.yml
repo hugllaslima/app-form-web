@@ -1,30 +1,42 @@
-name: Deploy Para Ambiente de Producao AWS (ECR + EC2)
+# 🚀 PIPELINE DE PRODUÇÃO - Deploy Para Ambiente de Producao AWS (ECR + EC2)
+# Este workflow implementa o deploy automatizado para o ambiente de produção
+# Utiliza AWS ECR para registry de imagens e EC2 para hospedagem da aplicação
 
+name: (CI/CD) Deploy Para Ambiente de Producao AWS (ECR + EC2)
+
+# 📋 TRIGGER: Define quando este workflow será executado
+# Executa apenas quando um Pull Request é FECHADO (merged) na branch main
 on:
   pull_request:
-    branches: [ main ]
-    types: [closed]
+    branches: [ main ]        # Monitora PRs direcionados à branch main
+    types: [closed]           # Só executa quando o PR é fechado (merged ou closed)
 
 jobs:
+  # 🏗️ JOB PRINCIPAL: Responsável por todo o processo de deploy em produção
   deploy-production:
-    # SÓ executa se for PR mergeado de stage para main
+    # ⚠️ CONDIÇÃO DE SEGURANÇA: Garante que só executa em cenários específicos
+    # SÓ executa se for PR mergeado de stage para main (fluxo GitFlow)
     if: |
       github.event.pull_request.merged == true && 
       github.event.pull_request.head.ref == 'stage' &&
       github.event.pull_request.base.ref == 'main'
-    runs-on: ubuntu-latest
-    environment: app-form-web
+    
+    runs-on: ubuntu-latest     # Executa em runner Ubuntu (GitHub-hosted)
+    environment: app-form-web  # Usa environment para controle de secrets e aprovações
     
     steps:
+      # 🔍 STEP 1: Debug - Mostra informações do contexto para troubleshooting
       - name: Debug
         run: |
           echo "=== PRODUCTION DEPLOY ==="
           echo "Head: ${{ github.event.pull_request.head.ref }}"
           echo "Base: ${{ github.event.pull_request.base.ref }}"
           
+      # 📥 STEP 2: Checkout - Baixa o código fonte do repositório
       - name: Checkout do código
         uses: actions/checkout@v4
         
+      # 🔐 STEP 3: Autenticação AWS - Configura credenciais para acessar serviços AWS
       - name: Configurar AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -32,23 +44,28 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
           
+      # 🔑 STEP 4: Login ECR - Autentica Docker com o Amazon ECR (registry de imagens)
       - name: Login no Amazon ECR
         run: |
           aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | \
           docker login --username AWS --password-stdin ${{ secrets.AWS_ECR_REGISTRY }}
           
+      # 🏗️ STEP 5: Build - Constrói a imagem Docker da aplicação
       - name: Build da imagem
         run: |
           docker build -t ${{ secrets.AWS_ECR_REPOSITORY }} ./src
           
+      # 🏷️ STEP 6: Tag - Adiciona tag apropriada para o ECR (formato registry/repo:tag)
       - name: Tag da imagem para o ECR
         run: |
           docker tag ${{ secrets.AWS_ECR_REPOSITORY }}:latest ${{ secrets.AWS_ECR_REGISTRY }}/${{ secrets.AWS_ECR_REPOSITORY }}:latest
           
+      # 📤 STEP 7: Push - Envia a imagem para o Amazon ECR
       - name: Enviar a Imagem para o Amazon ECR
         run: |
           docker push ${{ secrets.AWS_ECR_REGISTRY }}/${{ secrets.AWS_ECR_REPOSITORY }}:latest
           
+      # 🚀 STEP 8: Deploy EC2 - Conecta via SSH na instância EC2 e atualiza a aplicação
       - name: Deploy na Instância EC2 via SSH
         uses: appleboy/ssh-action@v0.1.7
         with:
@@ -57,8 +74,12 @@ jobs:
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           envs: AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,AWS_REGION
           script: |
+            # Login no ECR dentro da instância EC2
             sudo docker login --username AWS --password $(aws ecr get-login-password --region $AWS_REGION) ${{ secrets.AWS_ECR_REGISTRY }}
+            # Baixa a nova versão da imagem
             sudo docker pull ${{ secrets.AWS_ECR_REGISTRY }}/${{ secrets.AWS_ECR_REPOSITORY }}:latest
+            # Para e remove o container antigo (|| true evita erro se não existir)
             sudo docker stop ${{ secrets.AWS_ECR_REPOSITORY }} || true
             sudo docker rm ${{ secrets.AWS_ECR_REPOSITORY }} || true
+            # Inicia o novo container com a versão atualizada
             sudo docker run -d --restart=always --name ${{ secrets.AWS_ECR_REPOSITORY }} -p 8080:80 ${{ secrets.AWS_ECR_REGISTRY }}/${{ secrets.AWS_ECR_REPOSITORY }}:latest
